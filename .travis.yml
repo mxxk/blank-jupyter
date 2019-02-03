@@ -1,0 +1,13 @@
+sudo: required
+language: minimal
+services:
+    - docker
+cache:
+    directories:
+        - cache
+install:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker pull "$DOCKER_IMAGE"
+script:
+    # Run Docker image, passing all environment variables into it.
+    - docker run --rm --env-file <(env) -v "$PWD/cache:/cache" "$DOCKER_IMAGE"
